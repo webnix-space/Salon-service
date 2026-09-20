@@ -5,7 +5,7 @@
 //   CHAT_PROVIDER          "gemini" (default) or "anthropic"
 //   GEMINI_API_KEY         required when provider is gemini
 //   GEMINI_MODEL           default gemini-2.5-flash  (Google retires this model in Oct 2026; see README)
-//   GEMINI_FALLBACK_MODEL  optional, tried automatically if GEMINI_MODEL returns 404
+//   GEMINI_FALLBACK_MODEL  default gemini-flash-latest, tried if GEMINI_MODEL is 404 (retired), 429 (quota) or 5xx
 //   ANTHROPIC_API_KEY      required when provider is anthropic
 //   CHAT_MODEL             anthropic model, default claude-haiku-4-5-20251001
 //   LEAD_WEBHOOK_URL       optional Google Apps Script URL that appends a row to a Sheet
@@ -99,10 +99,31 @@ async function timedFetch(url, opts, ms) {
   }
 }
 
+class ChatError extends Error {
+  constructor(code, status) {
+    super(code);
+    this.code = code;
+    this.status = status;
+  }
+}
+
+function codeFor(status, bodyText) {
+  if (status === 404) return "model_not_found";
+  if (status === 429) return "quota";
+  if (status === 401 || status === 403) return "bad_key";
+  if (status === 400 && /API key|API_KEY/i.test(bodyText || "")) return "bad_key";
+  if (status === 400) return "bad_request";
+  return "upstream_error";
+}
+
 // ---- Provider adapters: each returns { text, leadInput } ------------------------------
 
 async function callGemini(messages, system) {
-  const models = [process.env.GEMINI_MODEL || "gemini-2.5-flash", process.env.GEMINI_FALLBACK_MODEL].filter(Boolean);
+  const models = [
+    process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    process.env.GEMINI_FALLBACK_MODEL || "gemini-flash-latest",
+  ];
+  let lastErr = new ChatError("upstream_error", 502);
 
   for (const model of models) {
     const is25 = model.startsWith("gemini-2.5");
@@ -127,13 +148,13 @@ async function callGemini(messages, system) {
       25000
     );
 
-    if (r.status === 404) {
-      console.error("Gemini model not found (retired?):", model);
-      continue; // try the fallback model, if any
-    }
     if (!r.ok) {
-      console.error("gemini error", r.status, (await r.text()).slice(0, 300));
-      throw new Error("upstream " + r.status);
+      const body = (await r.text()).slice(0, 300);
+      console.error("gemini error", model, r.status, body);
+      lastErr = new ChatError(codeFor(r.status, body), r.status);
+      // Model retired, quota hit, or Google-side error: try the next model.
+      if (r.status === 404 || r.status === 429 || r.status >= 500) continue;
+      throw lastErr;
     }
 
     const data = await r.json();
@@ -146,7 +167,7 @@ async function callGemini(messages, system) {
       .trim();
     return { text, leadInput: fn ? fn.functionCall.args : null };
   }
-  throw new Error("no available Gemini model");
+  throw lastErr;
 }
 
 async function callAnthropic(messages, system) {
@@ -170,8 +191,9 @@ async function callAnthropic(messages, system) {
     25000
   );
   if (!r.ok) {
-    console.error("anthropic error", r.status, (await r.text()).slice(0, 300));
-    throw new Error("upstream " + r.status);
+    const body = (await r.text()).slice(0, 300);
+    console.error("anthropic error", r.status, body);
+    throw new ChatError(codeFor(r.status, body), r.status);
   }
   const data = await r.json();
   const blocks = Array.isArray(data.content) ? data.content : [];
@@ -245,22 +267,34 @@ async function saveLead(lead) {
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
 
+  const key = PROVIDER === "anthropic" ? process.env.ANTHROPIC_API_KEY : process.env.GEMINI_API_KEY;
+
+  // Health check: open /api/chat in a browser. Shows configuration only, never secrets.
+  if (req.method === "GET") {
+    return res.status(200).json({
+      ok: true,
+      provider: PROVIDER,
+      keyPresent: Boolean(key),
+      model: PROVIDER === "anthropic" ? process.env.CHAT_MODEL || "claude-haiku-4-5-20251001" : process.env.GEMINI_MODEL || "gemini-2.5-flash",
+      fallbackModel: PROVIDER === "gemini" ? process.env.GEMINI_FALLBACK_MODEL || "gemini-flash-latest" : null,
+      leadWebhook: Boolean(process.env.LEAD_WEBHOOK_URL),
+    });
+  }
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const allowed = process.env.ALLOWED_ORIGIN;
   if (allowed && req.headers.origin && req.headers.origin !== allowed) {
-    return res.status(403).json({ error: "Forbidden" });
+    return res.status(403).json({ error: "Forbidden", code: "forbidden_origin" });
   }
 
-  const key = PROVIDER === "anthropic" ? process.env.ANTHROPIC_API_KEY : process.env.GEMINI_API_KEY;
-  if (!key) return res.status(500).json({ error: "Assistant is not configured" });
+  if (!key) return res.status(500).json({ error: "Assistant is not configured", code: "not_configured" });
 
   const ip =
     (req.headers["x-forwarded-for"] || "").split(",")[0].trim() ||
     (req.socket && req.socket.remoteAddress) ||
     "unknown";
   if (ipLimited(ip) || overDailyCap()) {
-    return res.status(429).json({ error: "Too many messages. Please try again later." });
+    return res.status(429).json({ error: "Too many messages. Please try again later.", code: "rate_limited" });
   }
 
   const messages = cleanMessages(req.body && req.body.messages);
@@ -292,6 +326,6 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ reply: text || "Sorry, I didn't catch that. Could you rephrase?" });
   } catch (e) {
     console.error("chat error:", e.message);
-    return res.status(502).json({ error: "Assistant unavailable" });
+    return res.status(502).json({ error: "Assistant unavailable", code: e.code || "upstream_error" });
   }
 };
