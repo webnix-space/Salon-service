@@ -57,7 +57,7 @@ const photos = (cfg.photos || []).filter((p) => {
   return ok;
 });
 const galleryHtml = photos.length
-  ? `<div class="block" id="gallery"><h2>Inside the salon</h2><div class="gallery">` +
+  ? `<div class="block" id="gallery"><h2>${esc(cfg.galleryTitle || "Inside the salon")}</h2><div class="gallery">` +
     photos
       .map((p) => `<img src="/photos/${enc(p.file)}" alt="${esc(p.alt || cfg.name)}" loading="lazy">`)
       .join("") +
