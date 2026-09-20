@@ -49,19 +49,34 @@ const servicesHtml = cfg.services
   })
   .join("\n        ");
 
-// Photos: put files in ./photos and list them in config.photos: [{ "file": "a.jpg", "alt": "..." }]
+// Photos: put files in ./photos and list them in the config.
+//   heroPhoto: { file, alt }            one large photo beside the hero text
+//   photos:    [{ file, alt }, ...]     gallery
+//   demoPhotos: true                    stamps every photo "Sample photo" and adds a demo note (stock photos)
+// Files listed but missing from ./photos are skipped, so the page never shows broken images.
 const photosDir = path.join(__dirname, "photos");
-const photos = (cfg.photos || []).filter((p) => {
-  const ok = fs.existsSync(path.join(photosDir, p.file));
-  if (!ok) console.warn("Photo listed in config but missing in ./photos:", p.file);
+const have = (p) => {
+  const ok = p && p.file && fs.existsSync(path.join(photosDir, p.file));
+  if (p && p.file && !ok) console.warn("Photo listed in config but missing in ./photos:", p.file);
   return ok;
-});
+};
+const demoPhotos = Boolean(cfg.demoPhotos);
+const sampleTag = demoPhotos ? `<span class="sample-tag">Sample photo</span>` : "";
+const heroPhoto = have(cfg.heroPhoto) ? cfg.heroPhoto : null;
+const photos = (cfg.photos || []).filter(have);
+
+const figure = (p, cls, eager) =>
+  `<figure class="${cls}"><img src="/photos/${enc(p.file)}" alt="${esc(p.alt || cfg.name)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'}>${sampleTag}</figure>`;
+
+const heroPhotoHtml = heroPhoto ? figure(heroPhoto, "hero-photo", true) : "";
+const heroClass = heroPhoto ? "hero has-photo" : "hero";
+const galleryTitle = demoPhotos ? "Sample photos" : cfg.galleryTitle || "Inside the salon";
 const galleryHtml = photos.length
-  ? `<div class="block" id="gallery"><h2>${esc(cfg.galleryTitle || "Inside the salon")}</h2><div class="gallery">` +
-    photos
-      .map((p) => `<img src="/photos/${enc(p.file)}" alt="${esc(p.alt || cfg.name)}" loading="lazy">`)
-      .join("") +
-    `</div></div>`
+  ? `<div class="block" id="gallery"><h2>${esc(galleryTitle)}</h2>` +
+    (demoPhotos
+      ? `<p class="muted">These are stock photos used for this demo. We will replace them with photos of your own salon.</p>`
+      : "") +
+    `<div class="gallery">${photos.map((p) => figure(p, "shot", false)).join("")}</div></div>`
   : "";
 
 const chipsHtml = (cfg.chips || [])
@@ -117,6 +132,8 @@ const values = {
   rackHtml,
   servicesHtml,
   galleryHtml,
+  heroPhotoHtml,
+  heroClass,
   chipsHtml,
   jsonLd,
   clientData,
@@ -131,7 +148,12 @@ html = html.replace(/\{\{(\w+)\}\}/g, (m, key) => {
 const out = path.join(__dirname, "public");
 fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(path.join(out, "index.html"), html);
-if (photos.length) fs.cpSync(photosDir, path.join(out, "photos"), { recursive: true });
+if (heroPhoto || photos.length) {
+  fs.cpSync(photosDir, path.join(out, "photos"), {
+    recursive: true,
+    filter: (src) => fs.statSync(src).isDirectory() || /\.(jpe?g|png|webp|avif)$/i.test(src),
+  });
+}
 const fontsDir = path.join(__dirname, "fonts");
 if (fs.existsSync(fontsDir)) fs.cpSync(fontsDir, path.join(out, "fonts"), { recursive: true });
-console.log("Built public/index.html for", cfg.name, `(${photos.length} photos)`);
+console.log("Built public/index.html for", cfg.name, `(${photos.length + (heroPhoto ? 1 : 0)} photos)`);
