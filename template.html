@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<meta name="theme-color" content="#24142B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{description}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{{jsonLd}}</script>
+<style>
+:root{
+  --marble:#EFEDF1;
+  --paper:#FAF9FB;
+  --ink:#24142B;
+  --henna:#A3323F;
+  --henna-dark:#83232F;
+  --slate:#5A5262;
+  --line:#D3CED8;
+  --display:"Bodoni Moda","Bodoni 72",Didot,Georgia,serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;padding-bottom:76px;background:var(--marble);color:var(--ink);font:400 1.0625rem/1.6 var(--body)}
+body.chat-open{overflow:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--henna);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border-radius:999px;border:2px solid var(--henna);background:var(--henna);color:#fff;font:600 1rem/1 var(--body);text-decoration:none;cursor:pointer}
+.btn:hover{background:var(--henna-dark);border-color:var(--henna-dark)}
+.btn.ghost{background:transparent;color:var(--henna)}
+.btn.ghost:hover{background:var(--henna);color:#fff}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.mark{font:500 1.4rem/1 var(--display);text-decoration:none;letter-spacing:-.01em}
+.top-nav{display:none;gap:12px}
+
+/* hero */
+.hero{padding:28px 0 52px}
+h1{margin:0 0 20px;max-width:13em;font:500 clamp(2.4rem,9.5vw,4.6rem)/1.04 var(--display);letter-spacing:-.015em}
+.lede{max-width:34em;margin:0 0 28px;color:var(--slate)}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.rating-line{margin:22px 0 0;color:var(--slate);font-size:.95rem}
+.rating-line a{color:var(--ink)}
+
+/* the shade rack: hair colour levels 1 to 10 */
+.rack{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;max-width:760px;margin:48px 0 14px}
+.tress{display:flex;flex-direction:column;align-items:center;gap:6px;animation:rise .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * 70ms)}
+.tress .ring{width:12px;height:12px;border:2px solid var(--ink);border-radius:50%}
+.tress .strand{width:100%;height:clamp(120px,32vw,190px);clip-path:polygon(0 0,100% 0,100% 90%,50% 100%,0 90%);background:
+  linear-gradient(90deg,rgba(255,255,255,.14) 0 14%,transparent 14% 34%,rgba(0,0,0,.12) 34% 46%,transparent 46% 72%,rgba(255,255,255,.1) 72% 82%,transparent 82%),
+  var(--c)}
+.tress .lvl{font:600 .75rem/1 var(--body);color:var(--slate)}
+.rack-note{max-width:34em;margin:0;color:var(--slate);font-size:.95rem}
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+/* blocks */
+.block{padding:52px 0;border-top:1px solid var(--line)}
+h2{margin:0 0 12px;font:500 clamp(1.8rem,5.5vw,2.6rem)/1.1 var(--display);letter-spacing:-.01em}
+.block p{max-width:36em}
+.muted{color:var(--slate)}
+
+.services{display:grid;gap:32px 56px;margin-top:32px}
+.svc-group{padding-top:16px;border-top:1px solid var(--line)}
+.svc-group h3{margin:0 0 10px;font:500 1.5rem/1.2 var(--display)}
+.svc-items{margin:0;padding:0;list-style:none}
+.svc-items li{display:flex;justify-content:space-between;gap:16px;padding:5px 0}
+.price{font:600 1.05rem var(--body)}
+.ask{min-height:44px;margin-top:6px;padding:0;border:0;background:none;color:var(--henna);font:600 .95rem var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:24px}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;background:var(--line)}
+
+.score{margin:0;font:500 clamp(4.2rem,17vw,7.5rem)/1 var(--display);letter-spacing:-.02em}
+.score-line{margin:8px 0 24px;color:var(--slate)}
+
+.visit{display:grid;gap:32px}
+.facts{margin:0}
+.facts dt{margin-top:18px;font-weight:600}
+.facts dt:first-child{margin-top:0}
+.facts dd{margin:2px 0 0;color:var(--slate)}
+.facts a{color:var(--ink)}
+.map{width:100%;height:320px;border:0;border-radius:12px;background:var(--line)}
+.visit-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+
+.foot{padding:28px 20px 40px;color:var(--slate);font-size:.9rem}
+.foot p{margin:0 0 6px}
+
+/* mobile action bar (desktop uses header buttons and the floating chat button) */
+.bar{position:fixed;inset:auto 0 0 0;z-index:20;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:var(--ink)}
+.bar a,.bar button{display:flex;align-items:center;justify-content:center;min-height:48px;border:0;border-radius:10px;background:transparent;color:#fff;font:600 .95rem var(--body);text-decoration:none;cursor:pointer}
+.bar .primary{background:var(--henna)}
+.fab{display:none}
+
+/* chat panel */
+.chat{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;background:var(--paper)}
+.chat[hidden]{display:none}
+.chat-head{display:flex;align-items:center;justify-content:space-between;padding:6px 6px 6px 18px;background:var(--ink);color:#fff}
+.chat-head strong{font:500 1.15rem var(--display)}
+.chat-close{min-width:48px;min-height:48px;border:0;background:none;color:#fff;font-size:1.7rem;line-height:1;cursor:pointer}
+.msgs{flex:1;display:flex;flex-direction:column;gap:10px;padding:16px;overflow-y:auto}
+.m{max-width:86%;padding:10px 14px;border-radius:14px;font-size:1rem;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.bot{align-self:flex-start;border:1px solid var(--line);border-bottom-left-radius:4px;background:#fff}
+.m.user{align-self:flex-end;border-bottom-right-radius:4px;background:var(--henna);color:#fff}
+.m.typing{color:var(--slate)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-self:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 10px}
+.chips[hidden]{display:none}
+.chip{min-height:40px;padding:8px 14px;border:1.5px solid var(--henna);border-radius:999px;background:transparent;color:var(--henna);font:600 .9rem var(--body);cursor:pointer}
+.chip:hover{background:var(--henna);color:#fff}
+.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:#fff}
+.chat-form textarea{flex:1;min-height:46px;max-height:120px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font:1rem/1.4 var(--body);color:var(--ink);resize:none}
+.chat-form .btn{min-height:46px;padding:0 18px}
+
+@media (min-width:760px){
+  body{padding-bottom:0}
+  .top-nav{display:flex}
+  .bar{display:none}
+  .fab{position:fixed;right:20px;bottom:20px;z-index:20;display:inline-flex;min-height:52px;box-shadow:0 10px 30px rgba(36,20,43,.25)}
+  .chat{inset:auto 20px 84px auto;width:380px;height:min(600px,calc(100vh - 120px));border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(36,20,43,.28);overflow:hidden}
+  body.chat-open{overflow:auto}
+  .visit{grid-template-columns:1fr 1.2fr;align-items:start}
+  .services{grid-template-columns:repeat(2,1fr)}
+  .gallery{grid-template-columns:repeat(3,1fr)}
+  .rack{gap:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tress{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#top">{{name}}</a>
+    <nav class="top-nav" aria-label="Contact">
+      <a class="btn ghost" href="tel:{{phoneTel}}">Call {{phoneDisplay}}</a>
+      <a class="btn" href="{{waUrl}}" target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </header>
+</div>
+
+<main id="top">
+  <div class="wrap">
+    <div class="hero">
+      <h1>{{tagline}}</h1>
+      <p class="lede">Ask a question or request an appointment right here. No app, no sign-up. {{hours}}</p>
+      <div class="cta">
+        <button class="btn" type="button" data-open-chat>Request an appointment</button>
+        <a class="btn ghost" href="tel:{{phoneTel}}">Call {{phoneDisplay}}</a>
+      </div>
+      <p class="rating-line">Rated {{rating}} on Google from {{reviewCount}} reviews. <a href="{{reviewsUrl}}" target="_blank" rel="noopener">Read them</a></p>
+
+      {{rackHtml}}
+      <p class="rack-note">Hair colour levels run from 1 (darkest) to 10 (lightest). Bring a photo, or tell us your level, and we'll plan your colour with you.</p>
+    </div>
+
+    <div class="block" id="services">
+      <h2>Services</h2>
+      <p class="muted">Prices depend on the service and on your hair or skin type. Tap "Ask for prices" and we'll confirm.</p>
+      <div class="services">
+        {{servicesHtml}}
+      </div>
+    </div>
+
+    {{galleryHtml}}
+
+    <div class="block" id="reviews">
+      <p class="score">{{rating}}</p>
+      <p class="score-line">out of 5, from {{reviewCount}} Google reviews</p>
+      <a class="btn ghost" href="{{reviewsUrl}}" target="_blank" rel="noopener">Read reviews on Google</a>
+    </div>
+
+    <div class="block" id="visit">
+      <div class="visit">
+        <div>
+          <h2>Find us</h2>
+          <dl class="facts">
+            <dt>Address</dt>
+            <dd>{{fullAddress}}</dd>
+            <dt>Hours</dt>
+            <dd>{{hours}}</dd>
+            <dt>Phone</dt>
+            <dd><a href="tel:{{phoneTel}}">{{phoneDisplay}}</a></dd>
+            {{instagramRow}}
+          </dl>
+          <div class="visit-cta">
+            <a class="btn" href="{{directionsUrl}}" target="_blank" rel="noopener">Get directions</a>
+            <a class="btn ghost" href="{{waUrl}}" target="_blank" rel="noopener">WhatsApp us</a>
+          </div>
+        </div>
+        <iframe class="map" title="Map showing {{name}}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="{{mapEmbedUrl}}"></iframe>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <p>&copy; {{year}} {{name}}, {{fullAddress}}</p>
+  {{creditHtml}}
+</footer>
+
+<div class="bar">
+  <button class="primary" type="button" data-open-chat>Chat</button>
+  <a href="tel:{{phoneTel}}">Call</a>
+  <a href="{{waUrl}}" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+<button class="btn fab" type="button" data-open-chat>Chat with us</button>
+
+<div class="chat" id="chat" role="dialog" aria-modal="true" aria-label="Chat with {{name}}" hidden>
+  <div class="chat-head">
+    <strong>{{name}}</strong>
+    <button class="chat-close" type="button" id="chat-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+  <div class="chips" id="chips" hidden>{{chipsHtml}}</div>
+  <div class="chat-form">
+    <textarea id="chat-input" rows="1" maxlength="500" placeholder="Type your message" aria-label="Your message"></textarea>
+    <button class="btn" type="button" id="chat-send">Send</button>
+  </div>
+</div>
+
+<script>
+window.__SALON__ = {{clientData}};
+(function () {
+  var S = window.__SALON__;
+  var panel = document.getElementById('chat');
+  var msgs = document.getElementById('msgs');
+  var chips = document.getElementById('chips');
+  var input = document.getElementById('chat-input');
+  var sendBtn = document.getElementById('chat-send');
+  var history = [];
+  var busy = false;
+  var opener = null;
+
+  function waLink(text) {
+    return 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(text);
+  }
+
+  function add(role, text) {
+    var d = document.createElement('div');
+    d.className = 'm ' + role;
+    d.textContent = text;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+    return d;
+  }
+
+  function addActions(items) {
+    var w = document.createElement('div');
+    w.className = 'actions';
+    items.forEach(function (i) {
+      var a = document.createElement('a');
+      a.className = 'btn' + (i.ghost ? ' ghost' : '');
+      a.href = i.href;
+      a.textContent = i.label;
+      if (i.blank) { a.target = '_blank'; a.rel = 'noopener'; }
+      w.appendChild(a);
+    });
+    msgs.appendChild(w);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function openChat(from) {
+    opener = from || null;
+    panel.hidden = false;
+    document.body.classList.add('chat-open');
+    if (!msgs.children.length) {
+      add('bot', S.greeting);
+      chips.hidden = false;
+    }
+    input.focus();
+  }
+
+  function closeChat() {
+    panel.hidden = true;
+    document.body.classList.remove('chat-open');
+    if (opener) opener.focus();
+  }
+
+  function fallback(text) {
+    add('bot', text);
+    addActions([
+      { label: 'Call ' + S.phoneDisplay, href: 'tel:' + S.phoneTel, ghost: true },
+      { label: 'WhatsApp', href: waLink('Hi ' + S.name + ', I have a question.'), blank: true }
+    ]);
+  }
+
+  function showLead(lead) {
+    var lines = [
+      'Hi ' + S.name + ', I would like to book an appointment.',
+      'Name: ' + lead.name,
+      'Phone: ' + lead.phone,
+      'Service: ' + lead.service,
+      'Preferred time: ' + lead.preferred_time
+    ];
+    if (lead.notes) lines.push('Notes: ' + lead.notes);
+    addActions([{ label: 'Send on WhatsApp', href: waLink(lines.join('\n')), blank: true }]);
+  }
+
+  async function send(text) {
+    text = (text || '').trim();
+    if (!text || busy) return;
+    chips.hidden = true;
+    input.value = '';
+    add('user', text);
+    history.push({ role: 'user', content: text });
+    busy = true;
+    sendBtn.disabled = true;
+    var typing = add('bot typing', 'Typing...');
+    try {
+      var r = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history.slice(-12) })
+      });
+      var d = await r.json().catch(function () { return {}; });
+      typing.remove();
+      if (r.status === 429) {
+        fallback('Too many messages just now. Please try again in a few minutes, or reach us directly.');
+      } else if (!r.ok || !d.reply) {
+        fallback("The assistant isn't available right now. Please reach us directly.");
+      } else {
+        add('bot', d.reply);
+        history.push({ role: 'assistant', content: d.reply });
+        if (d.lead) showLead(d.lead);
+      }
+    } catch (e) {
+      typing.remove();
+      fallback("The assistant isn't available right now. Please reach us directly.");
+    } finally {
+      busy = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  document.querySelectorAll('[data-open-chat]').forEach(function (b) {
+    b.addEventListener('click', function () { openChat(b); });
+  });
+  document.querySelectorAll('[data-ask]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      openChat(b);
+      send(b.getAttribute('data-ask'));
+    });
+  });
+  chips.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-say]');
+    if (c) send(c.getAttribute('data-say'));
+  });
+  document.getElementById('chat-close').addEventListener('click', closeChat);
+  sendBtn.addEventListener('click', function () { send(input.value); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input.value); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hidden) closeChat();
+  });
+})();
+</script>
+</body>
+</html>
