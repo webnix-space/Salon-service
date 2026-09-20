@@ -50,7 +50,12 @@ a{color:inherit}
 .top-nav{display:none;gap:12px}
 
 /* hero */
-.hero{padding:28px 0 56px}
+.hero{display:grid;gap:28px;padding:28px 0 56px}
+.hero-photo,.shot{position:relative;margin:0;overflow:hidden;border-radius:14px;background:var(--line)}
+.hero-photo{aspect-ratio:4/3}
+.hero-photo img,.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.sample-tag{position:absolute;left:10px;bottom:10px;padding:5px 11px;border-radius:999px;background:rgba(36,20,43,.85);color:#fff;font:600 .75rem/1.2 var(--body)}
+.hero-rack .rack{margin-top:16px}
 h1{margin:0 0 20px;max-width:13em;font:500 clamp(2.3rem,9vw,4.4rem)/1.08 var(--display);letter-spacing:-.01em}
 .lede{max-width:34em;margin:0 0 28px;color:var(--slate)}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
@@ -84,7 +89,7 @@ h2{margin:0 0 12px;font:500 clamp(1.8rem,5.5vw,2.6rem)/1.1 var(--display);letter
 .ask{min-height:44px;margin-top:6px;padding:0;border:0;background:none;color:var(--henna);font:600 .95rem var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:24px}
-.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;background:var(--line)}
+.shot{aspect-ratio:4/3}
 
 .score{margin:0;font:500 clamp(4.2rem,17vw,7.5rem)/1 var(--display);letter-spacing:-.02em}
 .score-line{margin:8px 0 24px;color:var(--slate)}
@@ -136,7 +141,11 @@ h2{margin:0 0 12px;font:500 clamp(1.8rem,5.5vw,2.6rem)/1.1 var(--display);letter
   body.chat-open{overflow:auto}
   .visit{grid-template-columns:1fr 1.2fr;align-items:start}
   .services{grid-template-columns:repeat(2,1fr)}
-  .gallery{grid-template-columns:repeat(3,1fr)}
+  .gallery{grid-template-columns:repeat(3,1fr);gap:14px}
+  .hero.has-photo{grid-template-columns:1.15fr .85fr;gap:32px 48px;align-items:center}
+  .hero.has-photo .hero-rack{grid-column:1 / -1}
+  .hero.has-photo h1{font-size:clamp(2.3rem,4.2vw,3.5rem)}
+  .hero.has-photo .hero-photo{aspect-ratio:auto;min-height:340px;height:100%}
   .rack{gap:10px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -157,17 +166,23 @@ h2{margin:0 0 12px;font:500 clamp(1.8rem,5.5vw,2.6rem)/1.1 var(--display);letter
       </nav>
     </header>
 
-    <div class="hero" id="top">
-      <h1>{{tagline}}</h1>
-      <p class="lede">Ask a question or request an appointment right here. No app, no sign-up. {{hours}}</p>
-      <div class="cta">
-        <button class="btn" type="button" data-open-chat>Request an appointment</button>
-        <a class="btn ghost" href="tel:{{phoneTel}}">Call {{phoneDisplay}}</a>
+    <div class="{{heroClass}}" id="top">
+      <div class="hero-text">
+        <h1>{{tagline}}</h1>
+        <p class="lede">Ask a question or request an appointment right here. No app, no sign-up. {{hours}}</p>
+        <div class="cta">
+          <button class="btn" type="button" data-open-chat>Request an appointment</button>
+          <a class="btn ghost" href="tel:{{phoneTel}}">Call {{phoneDisplay}}</a>
+        </div>
+        <p class="rating-line">Rated {{rating}} on Google from {{reviewCount}} reviews. <a href="{{reviewsUrl}}" target="_blank" rel="noopener">Read them</a></p>
       </div>
-      <p class="rating-line">Rated {{rating}} on Google from {{reviewCount}} reviews. <a href="{{reviewsUrl}}" target="_blank" rel="noopener">Read them</a></p>
 
-      {{rackHtml}}
-      <p class="rack-note">Hair colour levels run from 1 (darkest) to 10 (lightest). Bring a photo, or tell us your level, and we'll plan your colour with you.</p>
+      {{heroPhotoHtml}}
+
+      <div class="hero-rack">
+        {{rackHtml}}
+        <p class="rack-note">Hair colour levels run from 1 (darkest) to 10 (lightest). Bring a photo, or tell us your level, and we'll plan your colour with you.</p>
+      </div>
     </div>
   </div>
 </div>
