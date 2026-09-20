@@ -29,65 +29,241 @@
     "Bridal makeup enquiry",
     "Where are you located?"
   ],
-  "galleryTitle": "Inside the salon",
-  "photos": [],
+  "photos": [
+    {
+      "file": "salon-1.jpg",
+      "alt": "Hair colouring in progress"
+    },
+    {
+      "file": "salon-2.jpg",
+      "alt": "Stylist cutting hair"
+    },
+    {
+      "file": "salon-3.jpg",
+      "alt": "Bridal makeup"
+    },
+    {
+      "file": "salon-4.jpg",
+      "alt": "Facial treatment"
+    },
+    {
+      "file": "salon-5.jpg",
+      "alt": "Manicure"
+    },
+    {
+      "file": "salon-6.jpg",
+      "alt": "Hair wash station"
+    }
+  ],
+  "demoPhotos": true,
+  "heroPhoto": {
+    "file": "hero.jpg",
+    "alt": "Salon interior with styling chairs and mirrors"
+  },
   "services": [
-    { "group": "Hair", "items": [
-      { "name": "Haircut", "price": null },
-      { "name": "Hairstyling", "price": null },
-      { "name": "Creative cuts", "price": null },
-      { "name": "Children's cuts", "price": null },
-      { "name": "Blow dry", "price": null },
-      { "name": "Hair straightening", "price": null },
-      { "name": "Braids and box braids", "price": null },
-      { "name": "Hair extensions", "price": null },
-      { "name": "Shampoo and conditioning", "price": null }
-    ]},
-    { "group": "Colour", "items": [
-      { "name": "Hair colouring", "price": null },
-      { "name": "Balayage", "price": null },
-      { "name": "Colour techniques", "price": null }
-    ]},
-    { "group": "Hair treatments", "items": [
-      { "name": "Hair repairing treatments", "price": null },
-      { "name": "Global keratin", "price": null },
-      { "name": "Anti-dandruff treatment", "price": null },
-      { "name": "Hair and scalp care", "price": null },
-      { "name": "Texture service", "price": null }
-    ]},
-    { "group": "Bridal and makeup", "items": [
-      { "name": "Bridal makeup", "price": null },
-      { "name": "Party and occasion makeup", "price": null },
-      { "name": "Reception makeup", "price": null },
-      { "name": "Eye makeup", "price": null },
-      { "name": "Hair and makeup", "price": null },
-      { "name": "Wedding and event preparation", "price": null }
-    ]},
-    { "group": "Skin", "items": [
-      { "name": "Facials", "price": null },
-      { "name": "Skin clean-up", "price": null },
-      { "name": "Skin treatments", "price": null },
-      { "name": "Acne treatments", "price": null },
-      { "name": "Tanning", "price": null },
-      { "name": "Eyebrow and skin threading", "price": null }
-    ]},
-    { "group": "Nails", "items": [
-      { "name": "Manicure", "price": null },
-      { "name": "Pedicure", "price": null },
-      { "name": "Acrylic nails", "price": null },
-      { "name": "Nail care", "price": null }
-    ]},
-    { "group": "Body and spa", "items": [
-      { "name": "Body spa", "price": null },
-      { "name": "Massage", "price": null },
-      { "name": "Body waxing", "price": null },
-      { "name": "Foot care", "price": null },
-      { "name": "Spa services", "price": null }
-    ]},
-    { "group": "Men's grooming", "items": [
-      { "name": "Beard trim", "price": null },
-      { "name": "Beard grooming", "price": null },
-      { "name": "Male grooming", "price": null }
-    ]}
+    {
+      "group": "Hair",
+      "items": [
+        {
+          "name": "Haircut",
+          "price": null
+        },
+        {
+          "name": "Hairstyling",
+          "price": null
+        },
+        {
+          "name": "Creative cuts",
+          "price": null
+        },
+        {
+          "name": "Children's cuts",
+          "price": null
+        },
+        {
+          "name": "Blow dry",
+          "price": null
+        },
+        {
+          "name": "Hair straightening",
+          "price": null
+        },
+        {
+          "name": "Braids and box braids",
+          "price": null
+        },
+        {
+          "name": "Hair extensions",
+          "price": null
+        },
+        {
+          "name": "Shampoo and conditioning",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Colour",
+      "items": [
+        {
+          "name": "Hair colouring",
+          "price": null
+        },
+        {
+          "name": "Balayage",
+          "price": null
+        },
+        {
+          "name": "Colour techniques",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Hair treatments",
+      "items": [
+        {
+          "name": "Hair repairing treatments",
+          "price": null
+        },
+        {
+          "name": "Global keratin",
+          "price": null
+        },
+        {
+          "name": "Anti-dandruff treatment",
+          "price": null
+        },
+        {
+          "name": "Hair and scalp care",
+          "price": null
+        },
+        {
+          "name": "Texture service",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Bridal and makeup",
+      "items": [
+        {
+          "name": "Bridal makeup",
+          "price": null
+        },
+        {
+          "name": "Party and occasion makeup",
+          "price": null
+        },
+        {
+          "name": "Reception makeup",
+          "price": null
+        },
+        {
+          "name": "Eye makeup",
+          "price": null
+        },
+        {
+          "name": "Hair and makeup",
+          "price": null
+        },
+        {
+          "name": "Wedding and event preparation",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Skin",
+      "items": [
+        {
+          "name": "Facials",
+          "price": null
+        },
+        {
+          "name": "Skin clean-up",
+          "price": null
+        },
+        {
+          "name": "Skin treatments",
+          "price": null
+        },
+        {
+          "name": "Acne treatments",
+          "price": null
+        },
+        {
+          "name": "Tanning",
+          "price": null
+        },
+        {
+          "name": "Eyebrow and skin threading",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Nails",
+      "items": [
+        {
+          "name": "Manicure",
+          "price": null
+        },
+        {
+          "name": "Pedicure",
+          "price": null
+        },
+        {
+          "name": "Acrylic nails",
+          "price": null
+        },
+        {
+          "name": "Nail care",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Body and spa",
+      "items": [
+        {
+          "name": "Body spa",
+          "price": null
+        },
+        {
+          "name": "Massage",
+          "price": null
+        },
+        {
+          "name": "Body waxing",
+          "price": null
+        },
+        {
+          "name": "Foot care",
+          "price": null
+        },
+        {
+          "name": "Spa services",
+          "price": null
+        }
+      ]
+    },
+    {
+      "group": "Men's grooming",
+      "items": [
+        {
+          "name": "Beard trim",
+          "price": null
+        },
+        {
+          "name": "Beard grooming",
+          "price": null
+        },
+        {
+          "name": "Male grooming",
+          "price": null
+        }
+      ]
+    }
   ]
 }
