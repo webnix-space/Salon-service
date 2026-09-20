@@ -4,7 +4,7 @@
 // Env vars:
 //   CHAT_PROVIDER          "gemini" (default) or "anthropic"
 //   GEMINI_API_KEY         required when provider is gemini
-//   GEMINI_MODEL           default gemini-2.5-flash  (Google retires this model in Oct 2026; see README)
+//   GEMINI_MODEL           default gemini-3.6-flash  (gemini-2.5-flash is closed to new users and retiring)
 //   GEMINI_FALLBACK_MODEL  default gemini-flash-latest, tried if GEMINI_MODEL is 404 (retired), 429 (quota) or 5xx
 //   ANTHROPIC_API_KEY      required when provider is anthropic
 //   CHAT_MODEL             anthropic model, default claude-haiku-4-5-20251001
@@ -130,39 +130,51 @@ function codeFor(status, bodyText) {
 
 async function callGemini(messages, system) {
   const models = [
-    process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    process.env.GEMINI_MODEL || "gemini-3.6-flash",
     process.env.GEMINI_FALLBACK_MODEL || "gemini-flash-latest",
   ];
   let lastErr = new ChatError("upstream_error", 502);
 
   for (const model of models) {
     const is25 = model.startsWith("gemini-2.5");
-    const generationConfig = { maxOutputTokens: is25 ? 350 : 800, temperature: 0.4 };
-    if (is25) generationConfig.thinkingConfig = { thinkingBudget: 0 }; // faster and cheaper for a simple FAQ bot
+    const base = {
+      systemInstruction: { parts: [{ text: system }] },
+      contents: messages.map((m) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      })),
+      tools: [{ functionDeclarations: [{ name: "save_lead", description: LEAD_DESCRIPTION, parameters: LEAD_PARAMS }] }],
+    };
+    // Thinking is ON by default on newer models. Turn it down: a salon FAQ bot needs speed, not deep reasoning.
+    // 2.5 uses thinkingBudget; 3.x uses thinkingLevel. If a model rejects the setting, retry once without it.
+    const thinkingOptions = is25 ? [{ thinkingBudget: 0 }] : [{ thinkingLevel: "minimal" }, null];
 
-    const r = await timedFetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: system }] },
-          contents: messages.map((m) => ({
-            role: m.role === "assistant" ? "model" : "user",
-            parts: [{ text: m.content }],
-          })),
-          tools: [{ functionDeclarations: [{ name: "save_lead", description: LEAD_DESCRIPTION, parameters: LEAD_PARAMS }] }],
-          generationConfig,
-        }),
-      },
-      25000
-    );
+    let r = null;
+    let errBody = "";
+    for (const thinking of thinkingOptions) {
+      // Gemini 3.x works best at its default temperature, so only set one for 2.5.
+      const generationConfig = is25 ? { maxOutputTokens: 350, temperature: 0.4 } : { maxOutputTokens: 1024 };
+      if (thinking) generationConfig.thinkingConfig = thinking;
+
+      r = await timedFetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY },
+          body: JSON.stringify({ ...base, generationConfig }),
+        },
+        25000
+      );
+      if (r.ok) break;
+      errBody = (await r.text()).slice(0, 300);
+      if (r.status === 400 && thinking && /thinking/i.test(errBody)) continue;
+      break;
+    }
 
     if (!r.ok) {
-      const body = (await r.text()).slice(0, 300);
-      console.error("gemini error", model, r.status, body);
-      lastErr = new ChatError(codeFor(r.status, body), r.status);
-      // Model retired, quota hit, or Google-side error: try the next model.
+      console.error("gemini error", model, r.status, errBody);
+      lastErr = new ChatError(codeFor(r.status, errBody), r.status);
+      // Model retired or not offered to this key (404), quota (429), or a Google-side error: try the next model.
       if (r.status === 404 || r.status === 429 || r.status >= 500) continue;
       throw lastErr;
     }
@@ -171,7 +183,7 @@ async function callGemini(messages, system) {
     const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
     const fn = parts.find((p) => p.functionCall && p.functionCall.name === "save_lead");
     const text = parts
-      .filter((p) => typeof p.text === "string")
+      .filter((p) => typeof p.text === "string" && !p.thought)
       .map((p) => p.text)
       .join("")
       .trim();
@@ -287,7 +299,7 @@ module.exports = async function handler(req, res) {
       keyPresent: Boolean(key),
       keyLength: key.length, // a normal Google AI Studio key is 39 characters
       keyLooksLikeGoogleKey: PROVIDER === "gemini" ? /^AIza[\w-]{35}$/.test(key) : null, // hint only
-      model: PROVIDER === "anthropic" ? process.env.CHAT_MODEL || "claude-haiku-4-5-20251001" : process.env.GEMINI_MODEL || "gemini-2.5-flash",
+      model: PROVIDER === "anthropic" ? process.env.CHAT_MODEL || "claude-haiku-4-5-20251001" : process.env.GEMINI_MODEL || "gemini-3.6-flash",
       fallbackModel: PROVIDER === "gemini" ? process.env.GEMINI_FALLBACK_MODEL || "gemini-flash-latest" : null,
       leadWebhook: Boolean(process.env.LEAD_WEBHOOK_URL),
     });
