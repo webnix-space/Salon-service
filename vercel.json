@@ -1,0 +1,7 @@
+{
+  "buildCommand": "node build.js",
+  "outputDirectory": "public",
+  "functions": {
+    "api/chat.js": { "maxDuration": 30 }
+  }
+}
