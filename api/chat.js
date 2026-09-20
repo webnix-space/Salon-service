@@ -15,6 +15,16 @@
 const config = require("../salon.config.json");
 
 const PROVIDER = (process.env.CHAT_PROVIDER || "gemini").toLowerCase();
+
+// Env values pasted from a phone often carry stray spaces, newlines, quotes or a "NAME=" prefix.
+const cleanKey = (v) =>
+  String(v || "")
+    .trim()
+    .replace(/^[A-Z_]+\s*=\s*/, "")
+    .replace(/^["']+|["']+$/g, "")
+    .trim();
+const GEMINI_KEY = cleanKey(process.env.GEMINI_API_KEY);
+const ANTHROPIC_KEY = cleanKey(process.env.ANTHROPIC_API_KEY);
 const MAX_MSG_CHARS = 500;
 const MAX_HISTORY = 12;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
@@ -134,7 +144,7 @@ async function callGemini(messages, system) {
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_KEY },
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: system }] },
           contents: messages.map((m) => ({
@@ -177,7 +187,7 @@ async function callAnthropic(messages, system) {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "x-api-key": ANTHROPIC_KEY,
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
@@ -267,7 +277,7 @@ async function saveLead(lead) {
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
 
-  const key = PROVIDER === "anthropic" ? process.env.ANTHROPIC_API_KEY : process.env.GEMINI_API_KEY;
+  const key = PROVIDER === "anthropic" ? ANTHROPIC_KEY : GEMINI_KEY;
 
   // Health check: open /api/chat in a browser. Shows configuration only, never secrets.
   if (req.method === "GET") {
@@ -275,6 +285,8 @@ module.exports = async function handler(req, res) {
       ok: true,
       provider: PROVIDER,
       keyPresent: Boolean(key),
+      keyLength: key.length, // a normal Google AI Studio key is 39 characters
+      keyLooksLikeGoogleKey: PROVIDER === "gemini" ? /^AIza[\w-]{35}$/.test(key) : null, // hint only
       model: PROVIDER === "anthropic" ? process.env.CHAT_MODEL || "claude-haiku-4-5-20251001" : process.env.GEMINI_MODEL || "gemini-2.5-flash",
       fallbackModel: PROVIDER === "gemini" ? process.env.GEMINI_FALLBACK_MODEL || "gemini-flash-latest" : null,
       leadWebhook: Boolean(process.env.LEAD_WEBHOOK_URL),
