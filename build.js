@@ -132,4 +132,6 @@ const out = path.join(__dirname, "public");
 fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(path.join(out, "index.html"), html);
 if (photos.length) fs.cpSync(photosDir, path.join(out, "photos"), { recursive: true });
+const fontsDir = path.join(__dirname, "fonts");
+if (fs.existsSync(fontsDir)) fs.cpSync(fontsDir, path.join(out, "fonts"), { recursive: true });
 console.log("Built public/index.html for", cfg.name, `(${photos.length} photos)`);
