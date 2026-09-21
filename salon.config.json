@@ -56,6 +56,7 @@
     }
   ],
   "demoPhotos": true,
+  "noindex": true,
   "heroPhoto": {
     "file": "hero.jpg",
     "alt": "Salon interior with styling chairs and mirrors"
