@@ -135,6 +135,7 @@ const values = {
   heroPhotoHtml,
   heroClass,
   chipsHtml,
+  robots: cfg.noindex ? "noindex, nofollow" : "index, follow",
   jsonLd,
   clientData,
 };
