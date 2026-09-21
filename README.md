@@ -8,7 +8,7 @@ Static site (built from `salon.config.json`) plus one serverless chat endpoint.
 - `build.js`           renders the template into `public/index.html`
 - `api/chat.js`        chatbot endpoint (Gemini by default, Claude switchable)
 - `vercel.json`        tells Vercel to run the build and serve `public/`
-- `photos/`            optional: put salon photos here and list them in `config.photos`
+- `photos/`            hero and gallery photos (stock for the demo, the salon's real ones later)
 - `fonts/`             self-hosted Fraunces and Figtree (no Google Fonts request)
 
 ## Chatbot provider
@@ -18,13 +18,13 @@ Default is Gemini (free tier, good for the pitch demo).
 |---|---|
 | `CHAT_PROVIDER` | `gemini` (default) or `anthropic` |
 | `GEMINI_API_KEY` | key from Google AI Studio |
-| `GEMINI_MODEL` | default `gemini-2.5-flash` |
+| `GEMINI_MODEL` | default `gemini-3.6-flash` |
 | `GEMINI_FALLBACK_MODEL` | default `gemini-flash-latest`; tried automatically if the main model is retired (404), out of quota (429) or Google errors (5xx) |
 | `ANTHROPIC_API_KEY`, `CHAT_MODEL` | only if `CHAT_PROVIDER=anthropic` |
 
-**Gemini 2.5 Flash is scheduled to shut down on 16 Oct 2026, and it has already 404'd early once for some users.**
-Before any pitch after mid-October, open https://ai.google.dev/gemini-api/docs/models, copy the current Flash model id,
-and set it as `GEMINI_MODEL` (or as `GEMINI_FALLBACK_MODEL` today). No code change needed.
+**Gemini 2.5 Flash is closed to new API users** (Google returns 404 and points to `gemini-3.6-flash`) and is retiring.
+The default is now `gemini-3.6-flash`, with `gemini-flash-latest` as automatic fallback. When Google ships a newer Flash,
+set its id in `GEMINI_MODEL`: no code change needed. Thinking is turned down to "minimal" for speed and cost.
 
 **Free-tier data use:** Google may use free-tier prompts to improve its products. Fine for the demo with fake or your own
 test numbers. Do not run real customers' names and phone numbers through a free-tier key. Use a paid key or set
@@ -40,7 +40,7 @@ test numbers. Do not run real customers' names and phone numbers through a free-
      (typo, cut off, deleted, or pasted with extra text). Create a fresh key at https://aistudio.google.com/apikey, test it
      with the curl command below, then replace the Vercel variable and redeploy. `/api/chat` shows `keyLength` (normally 39).
    - `quota` -> free-tier limit hit; wait, or enable billing on the key.
-   - `model_not_found` -> both models unavailable; set `GEMINI_MODEL` to the current Flash id from Google's models page.
+   - `model_not_found` -> both models unavailable to this key; set `GEMINI_MODEL` to a Flash id that works in the curl test above.
    - `404 no_json` -> `/api/chat` is not deployed.
 3. Full details are in Vercel -> your project -> Logs (filter by `/api/chat`).
 
@@ -48,7 +48,7 @@ test numbers. Do not run real customers' names and phone numbers through a free-
 ```
 curl -s -H "Content-Type: application/json" -H "x-goog-api-key: PASTE_KEY_HERE" \
   -d '{"contents":[{"parts":[{"text":"say hi"}]}]}' \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent"
 ```
 A JSON reply containing "candidates" means the key works. `API_KEY_INVALID` means create a new key. Never paste keys into chats or commit them to GitHub.
 
@@ -74,12 +74,39 @@ function doPost(e) {
 3. Copy the web app URL into `LEAD_WEBHOOK_URL`.
 Without this, leads only appear in the function logs (search for `LEAD`).
 
-## Photos
-Ask the owner to send photos of the salon, or take them on your visit. Do not scrape Google image pages.
-Copy the files into `photos/` and add to the config:
-`"photos": [ { "file": "front.jpg", "alt": "Styling chairs at Geetanjali Salon" } ]`
-For a demo with stock photos, set `"galleryTitle": "Sample photos"` so the page does not claim they show the salon, and replace them before go-live.
-Keep each file under about 300 KB (resize before upload).
+## Photos (stock for the demo, real ones for delivery)
+The page has 1 hero photo and a 6-photo gallery. The file names are already in `salon.config.json`, so you only drop
+files into `photos/`. Missing files are skipped, so nothing ever shows as broken.
+
+**Demo mode:** with `"demoPhotos": true` every photo carries a "Sample photo" tag and the gallery says
+"These are stock photos used for this demo. We will replace them with photos of your own salon."
+When you swap in the salon's real photos, set `"demoPhotos": false`.
+
+| File | Search on Pexels or Unsplash |
+|---|---|
+| `hero.jpg` | hair salon interior, salon chairs mirrors |
+| `salon-1.jpg` | hair colouring, hair dye salon |
+| `salon-2.jpg` | hairdresser cutting hair |
+| `salon-3.jpg` | bridal makeup, Indian bridal makeup |
+| `salon-4.jpg` | facial treatment, skincare spa |
+| `salon-5.jpg` | manicure, nail salon |
+| `salon-6.jpg` | hair wash salon, shampoo station |
+
+Check the licence on each photo page (both sites allow commercial use without asking, with some restrictions).
+Prefer photos without clearly identifiable faces.
+
+**Resize in Termux** (about 150 KB each keeps the site fast):
+```
+pkg install imagemagick
+mkdir -p photos
+for f in ~/storage/downloads/*.jpg; do convert "$f" -resize 1400x -quality 78 -strip "photos/$(basename "$f")"; done
+```
+Then rename the results to the file names above. Do not scrape Google or Instagram images.
+
+## Demo vs live
+While this is a pitch demo built from public information, keep `"noindex": true` and `"demoPhotos": true` in `salon.config.json`.
+`noindex` tells Google not to list the demo, so strangers do not find an unofficial site under the salon's name and phone number.
+When the owner signs, set both to `false`, add real photos and prices, and connect their own domain.
 
 ## Before showing the owner
 - Fill `price` for every service you can get from the owner. Until then the site shows "Ask for prices".
