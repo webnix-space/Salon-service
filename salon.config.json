@@ -1,28 +1,28 @@
 {
-  "slug": "geetanjali-salon",
-  "name": "Geetanjali Salon",
-  "locality": "Kaonli, Dehradun",
-  "title": "Geetanjali Salon, Kaonli, Dehradun | Hair, colour, bridal makeup, skin and nails",
-  "tagline": "Hair, skin, makeup and nail care in Kaonli, Dehradun",
-  "description": "Geetanjali Salon in Kaonli, Dehradun: haircuts, colouring, balayage, keratin, facials, bridal and party makeup, nails and spa. Open daily 9:30 am to 8:30 pm. Rated 4.7 on Google.",
-  "rating": "4.7",
-  "reviewCount": "1,169",
-  "reviewsUrl": "https://www.google.com/maps/search/?api=1&query=Geetanjali+Salon+Kaonli+Dehradun",
-  "phoneDisplay": "088592 71818",
-  "phoneTel": "+918859271818",
-  "whatsapp": "918859271818",
+  "slug": "serene-studio-salon",
+  "name": "Serene Studio Salon",
+  "locality": "Sample Vihar, Dehradun",
+  "title": "Serene Studio Salon, Sample Vihar, Dehradun | Hair, colour, bridal makeup, skin and nails",
+  "tagline": "Hair, skin, makeup and nail care in Sample Vihar, Dehradun",
+  "description": "Serene Studio Salon in Sample Vihar, Dehradun: haircuts, colouring, balayage, keratin, facials, bridal and party makeup, nails and spa. Open daily 9:30 am to 8:30 pm. Rated 4.8 on Google.",
+  "rating": "4.8",
+  "reviewCount": "150",
+  "reviewsUrl": "https://www.google.com/maps/search/?api=1&query=Serene+Studio+Salon+Dehradun",
+  "phoneDisplay": "REPLACE_WITH_YOUR_NUMBER",
+  "phoneTel": "+91REPLACE_WITH_YOUR_NUMBER",
+  "whatsapp": "91REPLACE_WITH_YOUR_NUMBER",
   "address": {
-    "street": "Durga Orchid, GMS Rd, Milan Vihar, Shakti Enclave, Kaonli",
+    "street": "12 Sample Road, Sample Vihar",
     "city": "Dehradun",
     "region": "Uttarakhand",
-    "postalCode": "248171"
+    "postalCode": "248001"
   },
-  "mapsQuery": "Geetanjali Salon, Durga Orchid, GMS Rd, Kaonli, Dehradun 248171",
+  "mapsQuery": "Serene Studio Salon, Sample Road, Dehradun 248001",
   "hours": "Open every day, 9:30 am to 8:30 pm.",
   "openingHoursSchema": "Mo-Su 09:30-20:30",
   "instagram": "",
   "credit": "Site by Webnix",
-  "greeting": "Hi! I'm the Geetanjali Salon assistant. Ask about our services, or request an appointment and we'll confirm it.",
+  "greeting": "Hi! I'm the Serene Studio Salon assistant. Ask about our services, or request an appointment and we'll confirm it.",
   "chips": [
     "Request an appointment",
     "Which services do you offer?",
@@ -30,30 +30,12 @@
     "Where are you located?"
   ],
   "photos": [
-    {
-      "file": "salon-1.jpg",
-      "alt": "Hair colouring in progress"
-    },
-    {
-      "file": "salon-2.jpg",
-      "alt": "Stylist cutting hair"
-    },
-    {
-      "file": "salon-3.jpg",
-      "alt": "Bridal makeup"
-    },
-    {
-      "file": "salon-4.jpg",
-      "alt": "Facial treatment"
-    },
-    {
-      "file": "salon-5.jpg",
-      "alt": "Manicure"
-    },
-    {
-      "file": "salon-6.jpg",
-      "alt": "Hair wash station"
-    }
+    { "file": "salon-1.jpg", "alt": "Hair colouring in progress" },
+    { "file": "salon-2.jpg", "alt": "Stylist cutting hair" },
+    { "file": "salon-3.jpg", "alt": "Bridal makeup" },
+    { "file": "salon-4.jpg", "alt": "Facial treatment" },
+    { "file": "salon-5.jpg", "alt": "Manicure" },
+    { "file": "salon-6.jpg", "alt": "Hair wash station" }
   ],
   "demoPhotos": true,
   "noindex": true,
@@ -65,205 +47,82 @@
     {
       "group": "Hair",
       "items": [
-        {
-          "name": "Haircut",
-          "price": null
-        },
-        {
-          "name": "Hairstyling",
-          "price": null
-        },
-        {
-          "name": "Creative cuts",
-          "price": null
-        },
-        {
-          "name": "Children's cuts",
-          "price": null
-        },
-        {
-          "name": "Blow dry",
-          "price": null
-        },
-        {
-          "name": "Hair straightening",
-          "price": null
-        },
-        {
-          "name": "Braids and box braids",
-          "price": null
-        },
-        {
-          "name": "Hair extensions",
-          "price": null
-        },
-        {
-          "name": "Shampoo and conditioning",
-          "price": null
-        }
+        { "name": "Haircut", "price": null },
+        { "name": "Hairstyling", "price": null },
+        { "name": "Creative cuts", "price": null },
+        { "name": "Children's cuts", "price": null },
+        { "name": "Blow dry", "price": null },
+        { "name": "Hair straightening", "price": null },
+        { "name": "Braids and box braids", "price": null },
+        { "name": "Hair extensions", "price": null },
+        { "name": "Shampoo and conditioning", "price": null }
       ]
     },
     {
       "group": "Colour",
       "items": [
-        {
-          "name": "Hair colouring",
-          "price": null
-        },
-        {
-          "name": "Balayage",
-          "price": null
-        },
-        {
-          "name": "Colour techniques",
-          "price": null
-        }
+        { "name": "Hair colouring", "price": null },
+        { "name": "Balayage", "price": null },
+        { "name": "Colour techniques", "price": null }
       ]
     },
     {
       "group": "Hair treatments",
       "items": [
-        {
-          "name": "Hair repairing treatments",
-          "price": null
-        },
-        {
-          "name": "Global keratin",
-          "price": null
-        },
-        {
-          "name": "Anti-dandruff treatment",
-          "price": null
-        },
-        {
-          "name": "Hair and scalp care",
-          "price": null
-        },
-        {
-          "name": "Texture service",
-          "price": null
-        }
+        { "name": "Hair repairing treatments", "price": null },
+        { "name": "Global keratin", "price": null },
+        { "name": "Anti-dandruff treatment", "price": null },
+        { "name": "Hair and scalp care", "price": null },
+        { "name": "Texture service", "price": null }
       ]
     },
     {
       "group": "Bridal and makeup",
       "items": [
-        {
-          "name": "Bridal makeup",
-          "price": null
-        },
-        {
-          "name": "Party and occasion makeup",
-          "price": null
-        },
-        {
-          "name": "Reception makeup",
-          "price": null
-        },
-        {
-          "name": "Eye makeup",
-          "price": null
-        },
-        {
-          "name": "Hair and makeup",
-          "price": null
-        },
-        {
-          "name": "Wedding and event preparation",
-          "price": null
-        }
+        { "name": "Bridal makeup", "price": null },
+        { "name": "Party and occasion makeup", "price": null },
+        { "name": "Reception makeup", "price": null },
+        { "name": "Eye makeup", "price": null },
+        { "name": "Hair and makeup", "price": null },
+        { "name": "Wedding and event preparation", "price": null }
       ]
     },
     {
       "group": "Skin",
       "items": [
-        {
-          "name": "Facials",
-          "price": null
-        },
-        {
-          "name": "Skin clean-up",
-          "price": null
-        },
-        {
-          "name": "Skin treatments",
-          "price": null
-        },
-        {
-          "name": "Acne treatments",
-          "price": null
-        },
-        {
-          "name": "Tanning",
-          "price": null
-        },
-        {
-          "name": "Eyebrow and skin threading",
-          "price": null
-        }
+        { "name": "Facials", "price": null },
+        { "name": "Skin clean-up", "price": null },
+        { "name": "Skin treatments", "price": null },
+        { "name": "Acne treatments", "price": null },
+        { "name": "Tanning", "price": null },
+        { "name": "Eyebrow and skin threading", "price": null }
       ]
     },
     {
       "group": "Nails",
       "items": [
-        {
-          "name": "Manicure",
-          "price": null
-        },
-        {
-          "name": "Pedicure",
-          "price": null
-        },
-        {
-          "name": "Acrylic nails",
-          "price": null
-        },
-        {
-          "name": "Nail care",
-          "price": null
-        }
+        { "name": "Manicure", "price": null },
+        { "name": "Pedicure", "price": null },
+        { "name": "Acrylic nails", "price": null },
+        { "name": "Nail care", "price": null }
       ]
     },
     {
       "group": "Body and spa",
       "items": [
-        {
-          "name": "Body spa",
-          "price": null
-        },
-        {
-          "name": "Massage",
-          "price": null
-        },
-        {
-          "name": "Body waxing",
-          "price": null
-        },
-        {
-          "name": "Foot care",
-          "price": null
-        },
-        {
-          "name": "Spa services",
-          "price": null
-        }
+        { "name": "Body spa", "price": null },
+        { "name": "Massage", "price": null },
+        { "name": "Body waxing", "price": null },
+        { "name": "Foot care", "price": null },
+        { "name": "Spa services", "price": null }
       ]
     },
     {
       "group": "Men's grooming",
       "items": [
-        {
-          "name": "Beard trim",
-          "price": null
-        },
-        {
-          "name": "Beard grooming",
-          "price": null
-        },
-        {
-          "name": "Male grooming",
-          "price": null
-        }
+        { "name": "Beard trim", "price": null },
+        { "name": "Beard grooming", "price": null },
+        { "name": "Male grooming", "price": null }
       ]
     }
   ]
